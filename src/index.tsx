@@ -31,6 +31,10 @@ const App = () => {
             bundle: true,
             write: false,
             plugins: [unpkgPathPlugin()],
+            define: {
+                'process.env.NODE_ENV': '"production"',
+                global: 'window'
+            }
         }) 
         console.log("🚀 ~ file: index.tsx ~ line 35 ~ onClickHandler ~ result", result)
 
