@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import * as esbuild from "esbuild-wasm";
+import {unpkgPathPlugin} from './plugins/unpkg-path-pluging'
 
 const App = () => {
     const [input, setInput] = useState("");
@@ -24,14 +25,17 @@ const App = () => {
             return;
         }
 
-        // console.log(ref.current)
-        const result = await ref.current.transform(input,{
-            loader: 'jsx',
-            target: 'es2015'
-        })
-        console.log("🚀 ~ file: index.tsx ~ line 32 ~ onClickHandler ~ result", result)
 
-        setCode(result.code);
+        const result = await ref.current.build({ 
+            entryPoints: ["index.js"],
+            bundle: true,
+            write: false,
+            plugins: [unpkgPathPlugin()],
+        }) 
+        console.log("🚀 ~ file: index.tsx ~ line 35 ~ onClickHandler ~ result", result)
+
+
+        setCode(result.outputFiles[0].text);
     };
 
     return (
