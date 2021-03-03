@@ -4,7 +4,7 @@ import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-pluging";
 import { fetchPlugin } from "./plugins/fecth-plugin";
 import CodeEditor from './component/CodeEditor';
-
+import 'bulmaswatch/superhero/bulmaswatch.min.css';
 const App = () => {
     const [input, setInput] = useState("");
 
@@ -85,8 +85,8 @@ const App = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
             ></textarea>
-            <div>
-                <button type="submit" onClick={onClickHandler}>
+            <div >
+                <button type="submit" onClick={onClickHandler} >
                     submit
                 </button>
             </div>
