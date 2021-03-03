@@ -1,14 +1,15 @@
 import ReactDOM from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import * as esbuild from "esbuild-wasm";
-import {unpkgPathPlugin} from './plugins/unpkg-path-pluging';
-import {fetchPlugin} from './plugins/fecth-plugin'
+import { unpkgPathPlugin } from "./plugins/unpkg-path-pluging";
+import { fetchPlugin } from "./plugins/fecth-plugin";
+import CodeEditor from './component/CodeEditor';
 
 const App = () => {
     const [input, setInput] = useState("");
-    const [code, setCode] = useState("");
 
     const ref = useRef<any>();
+    const iframe = useRef<any>();
 
     const startService = async () => {
         ref.current = await esbuild.startService({
@@ -21,30 +22,65 @@ const App = () => {
         startService();
     }, []);
 
-    const onClickHandler =  async() => {
+    const onClickHandler = async () => {
         if (!ref.current) {
             return;
         }
 
+        iframe.current.scrdoc = html;
 
-        const result = await ref.current.build({ 
+        const result = await ref.current.build({
             entryPoints: ["index.js"],
             bundle: true,
             write: false,
-            plugins: [unpkgPathPlugin(),fetchPlugin(input)],
+            plugins: [unpkgPathPlugin(), fetchPlugin(input)],
             define: {
-                'process.env.NODE_ENV': '"production"',
-                global: 'window'
-            }
-        }) 
-        console.log("🚀 ~ file: index.tsx ~ line 35 ~ onClickHandler ~ result", result)
+                "process.env.NODE_ENV": '"production"',
+                global: "window",
+            },
+        });
+        // console.log(
+        //     "🚀 ~ file: index.tsx ~ line 35 ~ onClickHandler ~ result",
+        //     result
+        // );
 
+        // setCode(result.outputFiles[0].text);
 
-        setCode(result.outputFiles[0].text);
+        iframe.current.contentWindow.postMessage(
+            result.outputFiles[0].text,
+            "*"
+        );
     };
+
+    //execution code with eval
+    const html = `
+    <html>
+    <head>
+    </head>
+    <body>
+        <div id="root">
+        <script>
+        window.addEventListener('message',(e)=>{
+
+            try{
+                eval(event.data)
+            }catch(err){
+                const root = document.querySelector('#root');
+                root.innerHTML = '<div style="color: red"><h4> Runtime Error </h4> '  + err + '</div>';
+                console.error(err)
+
+            }
+
+        },false)
+        </script>
+        </div>
+    </body>
+    </html>
+`;
 
     return (
         <div>
+            <CodeEditor/>
             <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -54,7 +90,13 @@ const App = () => {
                     submit
                 </button>
             </div>
-            <pre>{code}</pre>
+            {/* <pre>{code}</pre> */}
+            <iframe
+                ref={iframe}
+                srcDoc={html}
+                sandbox="allow-scripts"
+                title="box-preview"
+            ></iframe>
         </div>
     );
 };
