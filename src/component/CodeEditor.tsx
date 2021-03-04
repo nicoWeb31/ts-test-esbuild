@@ -4,7 +4,7 @@ import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import codeShift from "jscodeshift";
 import Highlighter from "monaco-jsx-highlighter";
-import "./syntax.css"
+import "./syntax.css";
 
 import "./code-editor.style.css";
 
@@ -19,18 +19,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     const onEditorDidMount: EditorDidMount = (getValue, monacoEditor) => {
         editorRef.current = monacoEditor;
         monacoEditor.onDidChangeModelContent(() => {
-            console.log(getValue());
             onChange(getValue());
         });
 
         monacoEditor.getModel()?.updateOptions({ tabSize: 2 });
+
         const highlighter = new Highlighter(
-            //@ts-ignore
+            // @ts-ignore
             window.monaco,
             codeShift,
             monacoEditor
         );
-
         highlighter.highLightOnDidChangeModelContent(
             () => {},
             () => {},
@@ -40,18 +39,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     };
 
     const onFormatClick = () => {
-        const unformated = editorRef.current.getModel().getValue();
+        // get current value from editor
+        const unformatted = editorRef.current.getModel().getValue();
 
+        // format that value
         const formatted = prettier
-            .format(unformated, {
+            .format(unformatted, {
                 parser: "babel",
                 plugins: [parser],
                 useTabs: false,
                 semi: true,
                 singleQuote: true,
             })
-            .replace("/\n$/", "");
+            .replace(/\n$/, "");
 
+        // set the formatted value back in the editor
         editorRef.current.setValue(formatted);
     };
 
@@ -67,17 +69,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
             <MonacoEditor
                 editorDidMount={onEditorDidMount}
                 value={initialValue}
-                className="_editor"
-                language="javascript"
                 theme="dark"
+                language="javascript"
+                height="500px"
                 options={{
-                    wordwrap: "on",
+                    wordWrap: "on",
                     minimap: { enabled: false },
                     showUnused: false,
                     folding: false,
                     lineNumbersMinChars: 3,
                     fontSize: 16,
-                    scrollBeyondLine: false,
+                    scrollBeyondLastLine: false,
                     automaticLayout: true,
                 }}
             />

@@ -3,13 +3,16 @@ import { useState, useEffect, useRef } from "react";
 import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-pluging";
 import { fetchPlugin } from "./plugins/fecth-plugin";
-import CodeEditor from './component/CodeEditor';
-import 'bulmaswatch/superhero/bulmaswatch.min.css';
+import CodeEditor from "./component/CodeEditor";
+import "bulmaswatch/superhero/bulmaswatch.min.css";
+import Preview from "./component/Preview";
+
+
 const App = () => {
     const [input, setInput] = useState("");
+    const [code, setCode] = useState("");
 
     const ref = useRef<any>();
-    const iframe = useRef<any>();
 
     const startService = async () => {
         ref.current = await esbuild.startService({
@@ -27,8 +30,6 @@ const App = () => {
             return;
         }
 
-        iframe.current.scrdoc = html;
-
         const result = await ref.current.build({
             entryPoints: ["index.js"],
             bundle: true,
@@ -39,64 +40,26 @@ const App = () => {
                 global: "window",
             },
         });
-        // console.log(
-        //     "🚀 ~ file: index.tsx ~ line 35 ~ onClickHandler ~ result",
-        //     result
-        // );
 
-        // setCode(result.outputFiles[0].text);
-
-        iframe.current.contentWindow.postMessage(
-            result.outputFiles[0].text,
-            "*"
-        );
+        setCode(result.outputFiles[0].text);
     };
-
-    //execution code with eval
-    const html = `
-    <html>
-    <head>
-    </head>
-    <body>
-        <div id="root">
-        <script>
-        window.addEventListener('message',(e)=>{
-
-            try{
-                eval(event.data)
-            }catch(err){
-                const root = document.querySelector('#root');
-                root.innerHTML = '<div style="color: red"><h4> Runtime Error </h4> '  + err + '</div>';
-                console.error(err)
-
-            }
-
-        },false)
-        </script>
-        </div>
-    </body>
-    </html>
-`;
 
     return (
         <div>
-            <CodeEditor initialValue='toto' onChange={(value)=>setInput(value)}/>
-            <textarea
+            <CodeEditor
+                initialValue="toto"
+                onChange={(value) => setInput(value)}
+            />
+            {/* <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-            ></textarea>
-            <div >
-                <button type="submit" onClick={onClickHandler} >
+            ></textarea> */}
+            <div>
+                <button type="submit" onClick={onClickHandler}>
                     submit
                 </button>
             </div>
-            {/* <pre>{code}</pre> */}
-            <iframe
-                ref={iframe}
-                srcDoc={html}
-                sandbox="allow-scripts"
-                title="box-preview"
-            ></iframe>
+            <Preview code={code} />
         </div>
     );
 };
