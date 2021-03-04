@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { bundler } from "../bundler/index";
+import { useState, useEffect } from "react";
+import { bundle } from "../bundler/index";
 
 import CodeEditor from "../component/CodeEditor";
 import Resizable from "../component/Resizable";
@@ -10,10 +10,16 @@ const CodeCell = () => {
     const [input, setInput] = useState("");
     const [code, setCode] = useState("");
 
-    const onClickHandler = async () => {
-        const output = await bundler(input);
-        setCode(output);
-    };
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            const output = await bundle(input);
+            setCode(output);
+        }, 750);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [input]);
 
     return (
         <Resizable direction="vertical">
@@ -26,15 +32,11 @@ const CodeCell = () => {
             >
                 <Resizable direction="horizontal">
                     <CodeEditor
-                        initialValue="toto"
-                        onChange={(value) => setInput(value)}
+                        initialValue="const a = 1"
+                        onChange={(value:string) => setInput(value)}
                     />
                 </Resizable>
-                {/* <div>
-                    <button type="submit" onClick={onClickHandler}>
-                        submit
-                    </button>
-                </div> */}
+
                 <Preview code={code} />
             </div>
         </Resizable>

@@ -1,43 +1,69 @@
-import React from "react";
-import { ResizableBox, ResizableProps } from "react-resizable";
-import './resizable.css';
+import React, { useEffect, useState } from "react";
+import { ResizableBox, ResizableBoxProps } from "react-resizable";
+import "./resizable.css";
 
-interface ResizableBoxProps {
-
-    direction: 'horizontal' | 'vertical';
-
+interface ResizableProps {
+    direction: "horizontal" | "vertical";
 
 }
 
-const Resizable: React.FC <ResizableBoxProps>= ({direction, children}) => {
+const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
+    const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+    const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+    const [width ,setWidth] = useState(window.innerWidth *0.75);
 
+    useEffect(() => {
+        let timer: any;
+        const listener = () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
 
-    let resizableProps: ResizableProps;
+            timer = setTimeout(() => {
+                setInnerWidth(window.innerWidth);
+                setInnerHeight(window.innerHeight);
+                if(window.innerWidth *0.75 < width){
+                    setWidth(window.innerWidth * 0.75);
+                }
+            }, 100);
+        };
+        window.addEventListener("resize", listener);
 
-    if(direction === 'horizontal') {
+        return () => {
+            window.removeEventListener("resize", listener);
+        };
+    }, [width]);
+
+    let resizableProps: ResizableBoxProps;
+
+    if (direction === "horizontal") {
         resizableProps = {
-            className: 'resize-horizontal',
-            minConstraints:[window.innerWidth *0.2,Infinity],
-            maxConstraints:[window.innerWidth *0.75, Infinity],
-            height:Infinity,
-            width:window.innerWidth * 0.75,
-            resizeHandles:['e']
-        }
-    }else{
-        resizableProps ={
-            minConstraints:[Infinity, 24],
-            maxConstraints:[Infinity, window.innerHeight * 0.9],
-            height:300,
-            width:Infinity,
-            resizeHandles:['s'],
-        }
+            className: "resize-horizontal",
+            minConstraints: [innerWidth * 0.2, Infinity],
+            maxConstraints: [innerWidth * 0.75, Infinity],
+            height: Infinity,
+            width,
+            resizeHandles: ["e"],
+            onResizeStop: (e,data)=>{
+                setWidth(data.size.width)
+            }
+        };
+    } else {
+        resizableProps = {
+            minConstraints: [Infinity, 24],
+            maxConstraints: [Infinity, innerHeight * 0.9],
+            height: 300,
+            width: Infinity,
+            resizeHandles: ["s"],
+        };
     }
-    
-    return <ResizableBox 
-    className="react-resizable-handle"
-    {...resizableProps}
 
-    > {children}</ResizableBox>;
+    return (
+        <ResizableBox className="react-resizable-handle" {...resizableProps}>
+            {" "}
+            {children}
+        </ResizableBox>
+    );
 };
 
 export default Resizable;

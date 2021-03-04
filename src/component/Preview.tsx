@@ -36,11 +36,13 @@ const Preview: React.FC<previewProps> = ({ code }) => {
 
     useEffect(() => {
         iframe.current.scrdoc = html;
+        setTimeout(() => {
+            iframe.current.contentWindow.postMessage(
+                code,
+                "*"
+            );
+        },50)
 
-        iframe.current.contentWindow.postMessage(
-            code,
-            "*"
-        );
     }, [code]);
 
     return  (

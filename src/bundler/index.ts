@@ -1,14 +1,14 @@
 import * as esbuild from "esbuild-wasm";
-import { unpkgPathPlugin } from "./plugins/unpkg-path-pluging";
-import { fetchPlugin } from "./plugins/fecth-plugin";
+import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
+import { fetchPlugin } from "./plugins/fetch-plugin";
 
 let service: esbuild.Service;
-
-export const bundler = async (rawCode: string) => {
+export const bundle = async (rawCode: string) => {
     if (!service) {
+        
         service = await esbuild.startService({
             worker: true,
-            wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm",
+            wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm"
         });
     }
 
@@ -24,5 +24,4 @@ export const bundler = async (rawCode: string) => {
     });
 
     return result.outputFiles[0].text;
-
 };
