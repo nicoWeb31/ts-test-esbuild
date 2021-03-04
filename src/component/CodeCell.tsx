@@ -16,26 +16,29 @@ const CodeCell = () => {
     };
 
     return (
-        <Resizable direction='vertical'>
-            <div style={{ height: '100%',display:'flex',flexDirection:'row' }}>
-                <CodeEditor
-                    initialValue="toto"
-                    onChange={(value) => setInput(value)}
-                />
-                {/* <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-            ></textarea> */}
-                <div>
+        <Resizable direction="vertical">
+            <div
+                style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                }}
+            >
+                <Resizable direction="horizontal">
+                    <CodeEditor
+                        initialValue="toto"
+                        onChange={(value) => setInput(value)}
+                    />
+                </Resizable>
+                {/* <div>
                     <button type="submit" onClick={onClickHandler}>
                         submit
                     </button>
-                </div>
+                </div> */}
                 <Preview code={code} />
             </div>
         </Resizable>
     );
 };
-
 
 export default CodeCell;
