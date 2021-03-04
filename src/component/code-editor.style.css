@@ -1,11 +1,13 @@
 ._editor{
     height: 500px;
     border: 1px solid #ccc;
+
 }
 
 .editor-wrapper{
     position: relative;
     height: 100%;
+    width: 100%;
 
 }
 
