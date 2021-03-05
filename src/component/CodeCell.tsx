@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { bundle } from "../bundler/index";
-
+import bundle from "../bundler"
 import CodeEditor from "../component/CodeEditor";
 import Resizable from "../component/Resizable";
 
@@ -9,11 +8,13 @@ import Preview from "../component/Preview";
 const CodeCell = () => {
     const [input, setInput] = useState("");
     const [code, setCode] = useState("");
+    const [err, setErr] = useState("");
 
     useEffect(() => {
         const timer = setTimeout(async () => {
             const output = await bundle(input);
-            setCode(output);
+            setCode(output.code);
+            setErr(output.err);
         }, 750);
 
         return () => {
@@ -37,7 +38,7 @@ const CodeCell = () => {
                     />
                 </Resizable>
 
-                <Preview code={code} />
+                <Preview code={code} err={err}/>
             </div>
         </Resizable>
     );
