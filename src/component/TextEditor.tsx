@@ -33,7 +33,8 @@ const TextEditor: React.FC = () => {
         if (editing) {
             return (
                 <div ref={editorRef} className="text-editor">
-                    <MDEditor  value={value} onChange={(v)=>setValue(v || null)}/>
+                    {/* @ts-ignore */}
+                    <MDEditor  value={value} onChange={(v)=>setValue(v)}/>
                 </div>
             );
         } else {
