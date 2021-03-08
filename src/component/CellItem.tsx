@@ -1,11 +1,21 @@
-import React from 'react'
+import React from "react";
+import { Cell } from "../state/cell";
+import CodeCell from "./CodeCell";
+import TextEditor from "./TextEditor";
 
-const CellItem: React.FC = () => {
-    return (
-        <div>
-            cellItems
-        </div>
-    )
+interface cellItemsProps {
+    cell: Cell;
 }
 
-export default CellItem
+const CellItem: React.FC<cellItemsProps> = ({ cell }) => {
+    let child: JSX.Element;
+    if (cell.type === "code") {
+        child = <CodeCell />;
+    } else {
+        child = <TextEditor />;
+    }
+
+    return <div>{child}</div>;
+};
+
+export default CellItem;
