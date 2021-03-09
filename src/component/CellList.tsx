@@ -1,15 +1,28 @@
 import React from "react";
 import { useTypedSelector } from "../hooks/use-typed-selector";
 import CellItem from "./CellItem";
+import AddCell from "./addCell/add-cell";
 
 const CellList: React.FC = () => {
     const cells = useTypedSelector(({ cells: { order, data } }) => {
         return order.map((id) => data[id]);
     });
 
-    const renderedCells = cells.map((cell) => <CellItem key={cell.id} cell={cell}/>);
+    const renderedCells = cells.map((cell) => {
+        return (
+            <React.Fragment key={cell.id}>
+                <AddCell nexcellId={cell.id} />
+                <CellItem cell={cell} />
+            </React.Fragment>
+        );
+    });
 
-    return <div>{renderedCells}</div>;
+    return (
+        <div>
+            {renderedCells}
+            <AddCell nexcellId={null} />
+        </div>
+    );
 };
 
 export default CellList;
