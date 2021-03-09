@@ -4,17 +4,30 @@ import "./add-cell.style.css";
 
 interface AddcellProps {
     nexcellId: string | null;
+    forcevisible: boolean;
 }
 
-const AddCell: React.FC<AddcellProps> = ({ nexcellId }) => {
+const AddCell: React.FC<AddcellProps> = ({ nexcellId, forcevisible }) => {
     const { insertCellBefore } = useAction();
     return (
-        <div className="add-cell">
+        <div className={ `${forcevisible ? 'visible' : '' } add-cell` }>
             <div className="add-btn">
-                <button onClick={() => insertCellBefore(nexcellId, "code")}>
+                <button
+                    className="button is-rounded is-primary is-small"
+                    onClick={() => insertCellBefore(nexcellId, "code")}
+                >
+                    <span className="icon is-small">
+                        <i className="fa fa-plus"></i>
+                    </span>
                     Code
                 </button>
-                <button onClick={() => insertCellBefore(nexcellId, "text")}>
+                <button
+                    className="button is-rounded is-primary is-small"
+                    onClick={() => insertCellBefore(nexcellId, "text")}
+                >
+                    <span className="icon is-small">
+                        <i className="fa fa-plus"></i>
+                    </span>
                     Text
                 </button>
             </div>

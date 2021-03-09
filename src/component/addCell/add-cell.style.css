@@ -1,12 +1,16 @@
 .add-cell{
     position: relative;
     margin: 50px;
+    opacity: 0.4;
+    transition: opacity 0.3s
 }
 
 .add-cell .divider{
     position: absolute;
     top: 50%;
     bottom: 50%;
+    right: 5%;
+    left: 5%;
     border-bottom: 1px solid rgb(47, 170, 16);
     width: 100%;
     z-index:-1;
@@ -19,5 +23,14 @@
 }
 
 .add-cell .add-btn button {
-    margin: 0 20px;
+    margin: 5px 20px;
+    
+}
+
+.visible {
+    opacity: 1;
+}
+
+.add-cell:hover{
+    opacity: 1;
 }
