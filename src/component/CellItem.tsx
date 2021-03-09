@@ -3,6 +3,7 @@ import { Cell } from "../state/cell";
 import ActionBar from "./action-bar";
 import CodeCell from "./CodeCell";
 import TextEditor from "./TextEditor";
+import './cell-item.css'
 
 
 interface cellItemsProps {
@@ -18,7 +19,7 @@ const CellItem: React.FC<cellItemsProps> = ({ cell }) => {
     }
 
     return (
-        <div>
+        <div className="cell-item">
         <ActionBar id={cell.id}/>
 
         {child}
