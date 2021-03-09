@@ -1,3 +1,10 @@
 .cell-item{
     position: relative;
+    /* margin: 40px 10px; */
+}
+
+.action-bar-wrapper{
+    background:#37414b;
+    height: 30px;
+    width: 100%;
 }
