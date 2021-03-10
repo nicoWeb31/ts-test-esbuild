@@ -19,7 +19,14 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
         const { data, order } = state.cells;
         const orderedCells = order.map((id) => data[id]);
 
-        const cumuCode: any = [];
+        const cumuCode: any = [
+
+            `
+            const show = (value) =>{
+                document.querySelector('#root').innerHTML = value;
+            }
+            `
+        ];
         for (let c of orderedCells) {
             if (c.type === "code") {
                 cumuCode.push(c.content);
