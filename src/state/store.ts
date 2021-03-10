@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import reducers from "./reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import { ActionType } from "./action-types";
+// import { ActionType } from "./action-types";
 
 const initialState = {};
 
@@ -15,20 +15,20 @@ export const store = createStore(reducers,initialState,composeWithDevTools(apply
 //test 
 
 
-store.dispatch({
-type: ActionType.INSERT_CELL_AFTER,
-payload: {
-    id: null,
-    type: "code"
-}
-})
+// store.dispatch({
+// type: ActionType.INSERT_CELL_AFTER,
+// payload: {
+//     id: null,
+//     type: "code"
+// }
+// })
 
 
 
-store.dispatch({
-    type: ActionType.INSERT_CELL_AFTER,
-    payload: {
-        id: null,
-        type: "text"
-    }
-    })
+// store.dispatch({
+//     type: ActionType.INSERT_CELL_AFTER,
+//     payload: {
+//         id: null,
+//         type: "text"
+//     }
+//     })

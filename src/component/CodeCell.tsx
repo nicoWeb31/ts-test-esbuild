@@ -1,33 +1,31 @@
-import { useState, useEffect } from "react";
-import bundle from "../bundler"
+import { useEffect } from "react";
 import CodeEditor from "../component/CodeEditor";
-import Resizable from "../component/Resizable";
-import { useAction } from '../hooks/useAction'
-
 import Preview from "../component/Preview";
+import Resizable from "../component/Resizable";
+import { useAction } from "../hooks/useAction";
 import { Cell } from "../state/cell";
+import { useTypedSelector } from '../hooks/use-typed-selector';
 
-interface CodeCellProps{
-    cell: Cell
+
+
+interface CodeCellProps {
+    cell: Cell;
 }
 
-const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
-    // const [input, setInput] = useState("");
-    const [code, setCode] = useState("");
-    const [err, setErr] = useState("");
-    const { updateCell } = useAction(); 
+const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
+
+    const { updateCell, createBundle } = useAction();
+    const bundle = useTypedSelector((state)=>state.bundles[cell.id])
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            const output = await bundle(cell.content);
-            setCode(output.code);
-            setErr(output.err);
+            createBundle(cell.id, cell.content)
         }, 750);
 
         return () => {
             clearTimeout(timer);
         };
-    }, [cell.content]);
+    }, [cell.content, cell.id]);
 
     return (
         <Resizable direction="vertical">
@@ -41,11 +39,11 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
                 <Resizable direction="horizontal">
                     <CodeEditor
                         initialValue={cell.content}
-                        onChange={(value:string) => updateCell(cell.id,value)}
+                        onChange={(value: string) => updateCell(cell.id, value)}
                     />
                 </Resizable>
 
-                <Preview code={code} err={err}/>
+                {bundle && <Preview code={bundle.code} err={bundle.err} />}
             </div>
         </Resizable>
     );

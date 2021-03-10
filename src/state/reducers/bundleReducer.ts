@@ -5,14 +5,14 @@ import { Action } from "../action";
 interface BundlesState {
     [key: string]: {
         loading: boolean;
-        code: string;
-        err: string;
+        code: string | undefined;
+        err: string | undefined;
     };
 }
 
 const initialState: BundlesState = {};
 
-const bundleReducer = (
+const bundleReducer = produce ((
     state: BundlesState = initialState,
     action: Action
 ): BundlesState => {
@@ -36,6 +36,6 @@ const bundleReducer = (
         default:
             return state;
     }
-};
+});
 
 export default bundleReducer;

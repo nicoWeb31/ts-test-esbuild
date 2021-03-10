@@ -1,10 +1,9 @@
-import { directive } from "jscodeshift";
 import React, { useRef, useEffect } from "react";
 import "./preview.css";
 
 interface previewProps {
-    code: string;
-    err: string;
+    code: string | undefined;
+    err: string | undefined;
 }
 
 //execution code with eval
