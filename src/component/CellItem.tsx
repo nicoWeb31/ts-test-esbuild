@@ -1,7 +1,7 @@
 import React from "react";
 import { Cell } from "../state/cell";
 import ActionBar from "./action-bar";
-import CodeCell from "./CodeCell";
+import CodeCell from "./codeCell/CodeCell";
 import TextEditor from "./TextEditor";
 import "./cell-item.css";
 

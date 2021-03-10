@@ -1,30 +1,33 @@
 import { useEffect } from "react";
-import CodeEditor from "../component/CodeEditor";
-import Preview from "../component/Preview";
-import Resizable from "../component/Resizable";
-import { useAction } from "../hooks/useAction";
-import { Cell } from "../state/cell";
-import { useTypedSelector } from '../hooks/use-typed-selector';
-
-
+import CodeEditor from "../CodeEditor";
+import Preview from "../Preview";
+import Resizable from "../Resizable";
+import { useAction } from "../../hooks/useAction";
+import { Cell } from "../../state/cell";
+import { useTypedSelector } from "../../hooks/use-typed-selector";
+import './codeCell.style.css'
 
 interface CodeCellProps {
     cell: Cell;
 }
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
-
     const { updateCell, createBundle } = useAction();
-    const bundle = useTypedSelector((state)=>state.bundles[cell.id])
+    const bundle = useTypedSelector((state) => state.bundles[cell.id]);
 
     useEffect(() => {
+        if (!bundle) {
+            createBundle(cell.id, cell.content);
+            return;
+        }
         const timer = setTimeout(async () => {
-            createBundle(cell.id, cell.content)
+            createBundle(cell.id, cell.content);
         }, 750);
 
         return () => {
             clearTimeout(timer);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cell.content, cell.id]);
 
     return (
@@ -43,7 +46,13 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
                     />
                 </Resizable>
 
-                {bundle && <Preview code={bundle.code} err={bundle.err} />}
+                {!bundle || bundle.loading ? (
+                    <div className="progress-cover">
+                        <progress className ="progress is-smal is-primary" max="100">Loading...</progress>
+                    </div>
+                ) : (
+                    <Preview code={bundle.code} err={bundle.err} />
+                )}
             </div>
         </Resizable>
     );
