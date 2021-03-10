@@ -60,7 +60,6 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
 
     return (
         <ResizableBox className="react-resizable-handle" {...resizableProps}>
-            {" "}
             {children}
         </ResizableBox>
     );
