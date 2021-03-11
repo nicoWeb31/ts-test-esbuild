@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import { Provider } from "react-redux";
 import { store } from "./state";
-import CellList from "./component/CellList";
+import CellList from "./component/cellList/CellList";
 
 const App = () => {
     return (
